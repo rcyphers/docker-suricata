@@ -1,6 +1,6 @@
 FROM debian:latest
 LABEL maintainer="rcyphers"
-LABEL description="This example Dockerfile installs Suricata4.0.1"
+LABEL description="This Dockerfile installs Suricata-4.0.1 by compiling from source"
 
 ENV VER=4.0.1
 WORKDIR /opt
@@ -13,16 +13,15 @@ RUN tar -zxf /tmp/suricata-$VER.tar.gz \
     && apt-get update \
     && apt-get install -y --no-install-recommends apt-utils \
     && apt-get install -y wget libpcre3 libpcre3-dbg libpcre3-dev \
-build-essential autoconf automake libtool libpcap-dev libnet1-dev \
-libyaml-0-2 libyaml-dev zlib1g zlib1g-dev libcap-ng-dev libcap-ng0 \
-make libmagic-dev libjansson-dev libjansson4 pkg-config \
+       build-essential autoconf automake libtool libpcap-dev libnet1-dev \
+       libyaml-0-2 libyaml-dev zlib1g zlib1g-dev libcap-ng-dev libcap-ng0 \
+       make libmagic-dev libjansson-dev libjansson4 pkg-config \
      && ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
      && make \
      && make install-full \
      && ldconfig
 
 VOLUME /var/log/suricata
-
 ADD files/start.sh /start.sh
 RUN chmod u+x /start.sh
 ENTRYPOINT ["/start.sh"]
